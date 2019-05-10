@@ -1,0 +1,121 @@
+INTERLIS 2.3;
+
+/** !!------------------------------------------------------------------------------ 
+ * !! Version    | wer | Änderung 
+ * !!------------------------------------------------------------------------------ 
+ * !! 2019-05-10 | sz  | Erstfassung
+ * !!==============================================================================
+ */
+!!@ technicalContact=agi@bd.so.ch
+MODEL SO_AGI_Grundbuchplan_20190510 (de)
+AT "http://www.geo.so.ch/models/AGI"
+VERSION "2018-04-30"  =
+  IMPORTS GeometryCHLV95_V1,Units,CHAdminCodes_V1;
+
+  TOPIC Grundbuchplan =
+    OID AS INTERLIS.UUIDOID;
+
+    /** Symbole der Bodenbedeckungsobjekte
+     */
+    CLASS Boflaechesymbol =
+      /** Bodenbedeckungsart
+       */
+      Art_txt : MANDATORY TEXT*100;
+      /** Position
+       */
+      Pos : MANDATORY GeometryCHLV95_V1.Coord2;
+      /** Orientierung
+       */
+      Rot : 0 .. 360;
+      /** Gemeindenummer
+       */
+      BFS_Nr : MANDATORY CHAdminCodes_V1.CHMunicipalityCode;
+      /** Lieferdatum
+       */
+      Lieferdatum : MANDATORY INTERLIS.XMLDate;
+    END Boflaechesymbol;
+
+    CLASS Grenzpunkt =
+      /** Gemeindenummer
+       */
+      BFS_Nr : MANDATORY CHAdminCodes_V1.CHMunicipalityCode;
+      /** Gueltigkeit
+       */
+      Gueltigkeit : MANDATORY TEXT*20;
+      /** Art des Punktzeichens
+       */
+      Punktzeichen : MANDATORY TEXT*40;
+      /** Grenzpunktgeometrie
+       */
+      Geometrie : MANDATORY GeometryCHLV95_V1.Coord2;
+      /** Grenzpunkt in Mutation (ja/nein).
+       */
+      Mutation : MANDATORY BOOLEAN;
+    END Grenzpunkt;
+
+    CLASS Grundstueckpos =
+      /** Geometrie
+       */
+      Pos : MANDATORY GeometryCHLV95_V1.Coord2;
+      /** Horizontal Alignment
+       */
+      Hali_txt : TEXT*20;
+      /** Vertical Alignment
+       */
+      Vali_txt : TEXT*20;
+      /** Hilfslinie
+       */
+      Hilfslinie : GeometryCHLV95_V1.Line;
+      /** Gemeindenummer
+       */
+      BFS_Nr : MANDATORY CHAdminCodes_V1.CHMunicipalityCode;
+      /** Lieferdatum
+       */
+      Lieferdatum : MANDATORY INTERLIS.XMLDate;
+      /** E-Koordinate
+       */
+      y : MANDATORY 2000000.000 .. 3000000.000;
+      /** N-Koordinate
+       */
+      x : MANDATORY 1000000.000 .. 2000000.000;
+      /** Orientierung
+       */
+      Rot : -270.000 .. 90.000;
+      /** Nummer des Grundstücks
+       */
+      Nummer : MANDATORY TEXT*20;
+      /** Art des Grundstücks (Integer-Repräsentation)
+       */
+      Art : 0 .. 5;
+      /** In Mutation (ja/nein)
+       */
+      Mutation : MANDATORY BOOLEAN;
+    END Grundstueckpos;
+
+    CLASS Liegenschaft =
+      /** Geometrie der Liegenschaft
+       */
+      Geometrie : MANDATORY GeometryCHLV95_V1.SurfaceWithOverlaps2mm;
+      /** Fläche der Liegenschaft
+       */
+      Flaechenmass : MANDATORY 0 .. 99999999999;
+      /** Gemeindenummer
+       */
+      BFS_Nr : MANDATORY CHAdminCodes_V1.CHMunicipalityCode;
+      /** Lieferdatum
+       */
+      Lieferdatum : MANDATORY INTERLIS.XMLDate;
+      /** Position der Nummer als WKT-String
+       */
+      Numpos : TEXT*400;
+      /** Grundstücknummer
+       */
+      Nummer : MANDATORY TEXT*200;
+      /** In Mutation (ja/nein)
+       */
+      Mutation : BOOLEAN;
+    END Liegenschaft;
+
+  END Grundbuchplan;
+
+END SO_AGI_Grundbuchplan_20190510.
